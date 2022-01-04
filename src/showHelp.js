@@ -5,7 +5,7 @@ export const showHelp = (msg) => {
     const newEmbed = new MessageEmbed()
         .setColor("#f5c518")
         .setTitle("HELP")
-        .setURL("")
+        .setURL("https://github.com/Jadit19/IMDB-BOT")
         .setDescription("Here are the list of commands about the tasks I can perform.. I'm learning fast so there will soon be many additions to this list :grin:")
         .setThumbnail(IMDB_LOGO)
         
