@@ -26,7 +26,10 @@ const returnMovieInfo = async (url) => {
         }
         
         extractedData.title = $(".TitleHeader__TitleText-sc-1wu6n3d-0").text()
-        extractedData.brief = $(".GenresAndPlot__TextContainerBreakpointXL-cum89p-2").text()
+        const brief = $(".GenresAndPlot__TextContainerBreakpointXL-cum89p-2").text()
+        if (brief.length != 0){
+          extractedData.brief = brief
+        }
         var infoAbout = $(".TitleBlockMetaData__MetaDataList-sc-12ein40-0").children("li")
         var x=0
         if (infoAbout.length == 4)
@@ -127,21 +130,31 @@ export const sendMovieInfo = async (msg, url) => {
         .setImage(extractedData.photoLink)
         .setTimestamp()
         .setFooter("Scraped by IMDB-BOT", IMDB_LOGO)
-
-    const trailerURL = await returnVideoLink(`${MOVIE_URL}${extractedData.trailerLink}`)
-    const videoEmbed = new MessageEmbed()
-        .setColor("#f5c518")
-        .setTitle(`${extractedData.title} Trailer`)
-        .setURL(trailerURL)
-        .setThumbnail(IMDB_LOGO)
-        .setDescription(`Click the above link to view the trailer of **${extractedData.title}** available on the Imdb webpage`)
-        .setTimestamp()
-        .setFooter("Scraped by IMDB-BOT", IMDB_LOGO)
-
+        
     msg.channel.send({
         embeds: [
-            newEmbed,
-            videoEmbed
+            newEmbed
         ]
     })
+
+    if (extractedData.trailerLink != void 0){
+        const trailerURL = await returnVideoLink(`${MOVIE_URL}${extractedData.trailerLink}`)
+        if (trailerURL.startsWith("http")){
+            const videoEmbed = new MessageEmbed()
+                .setColor("#f5c518")
+                .setTitle(`${extractedData.title} Trailer`)
+                .setURL(trailerURL)
+                .setThumbnail(IMDB_LOGO)
+                .setDescription(`Click the above link to view the trailer of **${extractedData.title}** available on the Imdb webpage`)
+                .setTimestamp()
+                .setFooter("Scraped by IMDB-BOT", IMDB_LOGO)
+
+            msg.channel.send({
+                embeds: [
+                    videoEmbed
+                ]
+            })
+        }
+    }
+
 }
