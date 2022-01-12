@@ -12,9 +12,9 @@ const returnActorInfo = async (url) => {
         const extractedData = {
             name: "NA",
             works: "NA",
-            born: "",
+            born: "NA",
             movies: "NA",
-            awards: "",
+            awards: "NA",
             bio: "NA",
             photoLink: "NA"
         }
@@ -29,12 +29,22 @@ const returnActorInfo = async (url) => {
                 works.push(s.substring(1, s.length))
             }
         })
-        extractedData.works = works.join(", ")
+        if (works.length != 0)
+          extractedData.works = works.join(", ")
         var x = ""
         $("div#name-born-info").each((idx, el) => {
             x = $(el).text().trim().split("\n")
-            for (let i=3; i<x.length; i++){
-                extractedData.born += x[i].trim() + " "
+            var x1 = []
+            for (let i=0; i<x.length; i++){
+              if (x[i].trim().length != 0){
+                x1.push(x[i].trim())
+              }
+            }
+            if (x1.length > 1){
+              extractedData.born = ""
+            }
+            for (let i=1; i<x1.length; i++){
+                extractedData.born += x1[i] + " "
             }
         })
         $("#knownfor").children("div").each((idx, el) => {
@@ -47,9 +57,13 @@ const returnActorInfo = async (url) => {
             const movieData1 = movieData.name + " " + movieData.year
             movies.push(movieData1)
         })
-        extractedData.movies = movies.join(", ")
+        if (movies.length != 0)
+            extractedData.movies = movies.join(", ")
         $("span.awards-blurb").each((idx, el) => {
             var s = $(el).text().trim().split("\n")
+            if (s.length != 0){
+              extractedData.awards = ""
+            }
             s.forEach((s1) => {
                 extractedData.awards += s1.trim() + " "
             })
@@ -61,7 +75,8 @@ const returnActorInfo = async (url) => {
         $("div.name-trivia-bio-text").children("div.inline").each((idx, el) => {
             x.push($(el).text().trim())
         })
-        extractedData.bio = x[0].substring(0, x[0].length-52) + "..."
+        if (x.length != 0)
+            extractedData.bio = x[0].substring(0, x[0].length-52) + "..."
 
         return extractedData
     } catch (error){
@@ -69,11 +84,11 @@ const returnActorInfo = async (url) => {
     }
 }
 
-export const sendPersonInfo = async (msg, url) => {
+export const sendPersonInfo = async (msg, url, goodName) => {
     const actorsData = await returnActorsData(url)
 
     if (actorsData.length == 0){
-        msg.reply(`Sorry.. I couldn't find any actors in search related to **${goodName}**`)
+        msg.reply(`Sorry.. I couldn't find any people in search related to **${goodName}**`)
         return
     }
     const actorLink = MOVIE_URL + actorsData[0].link

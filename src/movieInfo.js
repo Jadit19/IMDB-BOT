@@ -16,8 +16,8 @@ const returnMovieInfo = async (url) => {
             director: "NA",
             writers: "NA",
             cast: "NA",
-            rating: 0,
-            releaseYear: 0,
+            rating: "NA",
+            releaseYear: "NA",
             censor: "NA",
             runtime: "NA",
             brief: "NA",
@@ -26,7 +26,7 @@ const returnMovieInfo = async (url) => {
         }
         
         extractedData.title = $(".TitleHeader__TitleText-sc-1wu6n3d-0").text()
-        const brief = $(".GenresAndPlot__TextContainerBreakpointXL-cum89p-2").text()
+        const brief = $(".GenresAndPlot__TextContainerBreakpointXS_TO_M-sc-cum89p-0").text()
         if (brief.length != 0){
           extractedData.brief = brief
         }
@@ -36,14 +36,13 @@ const returnMovieInfo = async (url) => {
             x += 1
         infoAbout.each((idx, el) => {
             var str1 = $(el).text()
-            if (idx == x){
-                str1 = str1.substring(0, str1.length/2)
-                extractedData.releaseYear = str1
-            } else if (idx == x+1){
-                str1 = str1.substring(0, str1.length/2)
-                extractedData.censor = str1
-            } else if (idx == x+2)
-                extractedData.runtime = str1
+            if (str1.length == 8){
+              extractedData.releaseYear = str1.substring(0, 4)
+            } else if (str1=="RR" || str1=="AA"){
+              extractedData.censor = str1.substring(0, 1)
+            } else if (str1.includes("h") || str1.includes("m")){
+              extractedData.runtime = str1
+            }
         })
         $(".ipc-metadata-list--baseAlt").each((idx, el) => {
             if (idx == 0){
@@ -67,7 +66,7 @@ const returnMovieInfo = async (url) => {
                             writers.push($(el2).children("a").text())
                         })
                         extractedData.writers = writers.join(", ")
-                    } else if (temp.startsWith("Stars")){
+                    } else if (temp.startsWith("Star")){
                         let cast = []
                         $(el1).children("div").children("ul").children("li").each((idx2, el2) => {
                             cast.push($(el2).children("a").text())
@@ -78,11 +77,15 @@ const returnMovieInfo = async (url) => {
             }
         })
         let genres = []
-        $(".GenresAndPlot__GenresChipList-cum89p-4").children("a").each((idx, el) => {
+        $("a.GenresAndPlot__GenreChip-cum89p-3").each((idx, el) => {
             genres.push($(el).children("span").text())
         })
-        if (genres.length != 0)
-            extractedData.genres = genres.join(", ")
+        $("a.GenresAndPlot__GenreChip-sc-cum89p-3").each((idx, el) => {
+            genres.push($(el).children("span").text())
+        })
+        const newGenres = [...new Set(genres)]
+        if (newGenres.length != 0)
+            extractedData.genres = newGenres.join(", ")
         $(".AggregateRatingButton__RatingScore-sc-1ll29m0-1").each((idx, el) => {
             if (idx == 0){
                 extractedData.rating = $(el).text()
@@ -97,7 +100,7 @@ const returnMovieInfo = async (url) => {
     }
 }
 
-export const sendMovieInfo = async (msg, url) => {
+export const sendMovieInfo = async (msg, url, enteredName) => {
     const moviesData = await returnMoviesData(url)
 
     if (moviesData.length == 0){
@@ -156,5 +159,4 @@ export const sendMovieInfo = async (msg, url) => {
             })
         }
     }
-
 }
