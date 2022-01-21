@@ -62,7 +62,8 @@ const returnActorInfo = async (url) => {
         $("span.awards-blurb").each((idx, el) => {
             var s = $(el).text().trim().split("\n")
             if (s.length != 0){
-              extractedData.awards = ""
+                if (extractedData.awards === "NA")
+                    extractedData.awards = ""
             }
             s.forEach((s1) => {
                 extractedData.awards += s1.trim() + " "
