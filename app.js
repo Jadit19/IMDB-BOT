@@ -11,6 +11,18 @@ import { sendMovieInfo } from "./src/movieInfo.js"
 import { sendPersonsData } from "./src/actorSearch.js"
 import { sendPersonInfo } from "./src/actorInfo.js"
 
+const checkArg = (c) => {
+    const charCode = c.charCodeAt(0);
+
+    if (charCode>=33 && charCode<=57)
+        return true
+    else if (charCode>=65 && charCode<=90)
+        return true
+    else if (charCode>=97 && charCode<=122)
+        return true
+    return false
+}
+
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -36,7 +48,7 @@ client.on("message", async (msg) => {
     }
 
     if (msg.content.startsWith(PREFIX)){
-        const[P, CMD, ...args] = msg.content
+        const[P, CMD, ...rawArgs] = msg.content
             .trim() 
             .substring(PREFIX.length)
             .split(/\s+/)
@@ -45,6 +57,13 @@ client.on("message", async (msg) => {
             msg.reply(`Please write a command name and a name after **${PREFIX}**`)
         } else {
             const CMD_NAME = CMD.toUpperCase()
+            const args = [];
+
+            for (let i=0; i<rawArgs.length; i++){
+                if (checkArg(rawArgs[i]))
+                    args.push(rawArgs[i])
+            }
+            
             const goodName = args.join(" ")
             const enteredName = args.join("+")
             const searchURL = MOVIE_URL + "/find?q=" + enteredName
