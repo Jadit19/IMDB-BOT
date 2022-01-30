@@ -9,4 +9,5 @@ Well, in my opinion, work speaks louder than words.
 - Just type in ` --imdb HELP ` to get this menu:
 
 ![Help Menu](./img/help-menu.png)
+- Visit the bot's page on <a href="https://top.gg/bot/927080106151792730">top.gg</a>. Do upvote if you like!
 - Enjoy using this bot and if an error pops up, do let me know! or feel free to make a PR! :)
