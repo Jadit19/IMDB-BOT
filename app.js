@@ -5,7 +5,7 @@ import { PREFIX, BOT_TOKEN, MOVIE_URL } from "./config.js"
 
 import { showHelp } from "./src/showHelp.js"
 import { contactInfo } from "./src/contact.js"
-import { sendInvite } from "./src/invite.js"
+import { sendInvite, sendHello } from "./src/invite.js"
 import { sendMoviesData } from "./src/movieSearch.js"
 import { sendMovieInfo } from "./src/movieInfo.js"
 import { sendPersonsData } from "./src/actorSearch.js"
@@ -28,6 +28,10 @@ const client = new Client({
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES
     ]
+})
+
+client.on('guildCreate', guild => {
+    sendHello(guild.systemChannel, guild.name)
 })
 
 client.on("ready", () => {

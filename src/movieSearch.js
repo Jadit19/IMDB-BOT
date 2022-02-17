@@ -33,7 +33,7 @@ export const sendMoviesData = async (msg, url, goodName) => {
     const extractedData = await returnMoviesData(url)
 
     if (extractedData.length == 0){
-        msg.reply(`Sorry.. I couldn't find any Movies or TV Shows searches related to **"${enteredName}"**`)
+        msg.reply(`Sorry.. I couldn't find any Movies or TV Shows searches related to **"${goodName}"**`)
         return
     }
     msg.reply(`I found these top results about **"${goodName}"** on the Imdb website:`)

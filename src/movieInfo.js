@@ -28,7 +28,7 @@ const returnMovieInfo = async (url) => {
         extractedData.title = $(".TitleHeader__TitleText-sc-1wu6n3d-0").text()
         const brief = $(".GenresAndPlot__TextContainerBreakpointXS_TO_M-sc-cum89p-0").text()
         if (brief.length != 0){
-          extractedData.brief = brief
+            extractedData.brief = brief
         }
         var infoAbout = $(".TitleBlockMetaData__MetaDataList-sc-12ein40-0").children("li")
         var x=0
@@ -36,12 +36,12 @@ const returnMovieInfo = async (url) => {
             x += 1
         infoAbout.each((idx, el) => {
             var str1 = $(el).text()
-            if (str1.length == 8){
-              extractedData.releaseYear = str1.substring(0, 4)
+            if (str1.startsWith("19") || str1.startsWith("20")){
+                extractedData.releaseYear = str1.substring(0, str1.length/2)
             } else if (str1=="RR" || str1=="AA"){
-              extractedData.censor = str1.substring(0, 1)
+                extractedData.censor = str1.substring(0, 1)
             } else if (str1.includes("h") || str1.includes("m")){
-              extractedData.runtime = str1
+                extractedData.runtime = str1
             }
         })
         $(".ipc-metadata-list--baseAlt").each((idx, el) => {
@@ -110,7 +110,7 @@ export const sendMovieInfo = async (msg, url, enteredName) => {
     const movieLink = MOVIE_URL + moviesData[0].link
     const extractedData = await returnMovieInfo(movieLink)
     msg.reply(`Here's what I found about **${extractedData.title}** on the Imdb website:`)
-    
+
     const newEmbed = new MessageEmbed()
         .setColor("#f5c518")
         .setTitle(extractedData.title)
@@ -130,9 +130,11 @@ export const sendMovieInfo = async (msg, url, enteredName) => {
             { name: "About", value: extractedData.brief },
         )
 
-        .setImage(extractedData.photoLink)
         .setTimestamp()
         .setFooter("Scraped by IMDB-BOT", IMDB_LOGO)
+
+    if (extractedData.photoLink != void 0)
+        newEmbed.setImage(extractedData.photoLink)
         
     msg.channel.send({
         embeds: [
