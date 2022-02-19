@@ -18,6 +18,7 @@ export const showHelp = (msg) => {
             { name: "`--imdb PI <person-name>`", value: "Returns information about the person with the given name" },
             { name: "`--imdb INVITE`", value: "Invite the IMDB-BOT to other servers!" },
             { name: "`--imdb CONTACT`", value: "Meet my creator!" },
+            { name: "`--imdb EXIT`", value: "I hope you never feel the need to use this command" },
             { name: "\u200B", value: "And no, I'm not case sensitive so you can type in any case you want! Just make sure you type `--imdb` in front of your message" }
         )
             

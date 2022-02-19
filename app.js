@@ -6,6 +6,7 @@ import { PREFIX, BOT_TOKEN, MOVIE_URL } from "./config.js"
 import { showHelp } from "./src/showHelp.js"
 import { contactInfo } from "./src/contact.js"
 import { sendInvite, sendHello } from "./src/invite.js"
+import { exitServer } from "./src/exit.js"
 import { sendMoviesData } from "./src/movieSearch.js"
 import { sendMovieInfo } from "./src/movieInfo.js"
 import { sendPersonsData } from "./src/actorSearch.js"
@@ -78,6 +79,8 @@ client.on("message", async (msg) => {
                 contactInfo(msg)
             } else if (CMD_NAME == "INVITE"){
                 sendInvite(msg)
+            } else if (CMD_NAME == "EXIT"){
+                exitServer(msg)
             } else if (CMD_NAME == "ST"){
                 if (args.length == 0){
                     msg.reply(`Please write a name after **${PREFIX} ${CMD_NAME}**`)
