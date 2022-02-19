@@ -86,7 +86,7 @@ const returnActorInfo = async (url) => {
 }
 
 export const sendPersonInfo = async (msg, url, goodName) => {
-    const actorsData = await returnActorsData(url)
+    const actorsData = await returnActorsData(url, goodName)
 
     if (actorsData.length == 0){
         msg.reply(`Sorry.. I couldn't find any people in search related to **${goodName}**`)

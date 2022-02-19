@@ -3,7 +3,7 @@ import cheerio from "cheerio"
 import { MessageEmbed } from "discord.js"
 import { IMDB_LOGO, MOVIE_URL } from "../config.js"
 
-export const returnMoviesData = async (url) => {
+export const returnMoviesData = async (url, goodName) => {
     try {
         const { data } = await axios.get(url)
         const $ = cheerio.load(data)
@@ -25,12 +25,13 @@ export const returnMoviesData = async (url) => {
         })
         return movieNames
     } catch(error){
+        console.log(`\nST, ERROR COMMAND: "${goodName}"\n`)
         console.log(error)
     }
 }
 
 export const sendMoviesData = async (msg, url, goodName) => {
-    const extractedData = await returnMoviesData(url)
+    const extractedData = await returnMoviesData(url, goodName)
 
     if (extractedData.length == 0){
         msg.reply(`Sorry.. I couldn't find any Movies or TV Shows searches related to **"${goodName}"**`)

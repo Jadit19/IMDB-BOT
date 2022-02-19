@@ -100,11 +100,11 @@ const returnMovieInfo = async (url) => {
     }
 }
 
-export const sendMovieInfo = async (msg, url, enteredName) => {
-    const moviesData = await returnMoviesData(url)
+export const sendMovieInfo = async (msg, url, goodName) => {
+    const moviesData = await returnMoviesData(url, goodName)
 
     if (moviesData.length == 0){
-        msg.reply(`Sorry.. I couldn't find any Movie or TV Show search related to **"${enteredName}"**`)
+        msg.reply(`Sorry.. I couldn't find any Movie or TV Show search related to **"${goodName}"**`)
         return
     }
     const movieLink = MOVIE_URL + moviesData[0].link
