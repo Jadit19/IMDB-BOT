@@ -2,6 +2,7 @@ import Discord from "discord.js"
 const { Client, Intents } = Discord
 
 import { PREFIX, BOT_TOKEN, MOVIE_URL } from "./config.js"
+import { makeBetterArgs } from "./src/helper.js"
 
 import { showHelp } from "./src/showHelp.js"
 import { contactInfo } from "./src/contact.js"
@@ -12,18 +13,6 @@ import { sendMovieInfo } from "./src/movieInfo.js"
 import { sendPersonsData } from "./src/actorSearch.js"
 import { sendPersonInfo } from "./src/actorInfo.js"
 import { errorDM } from "./src/errorDM.js"
-
-const checkArg = (c) => {
-    const charCode = c.charCodeAt(0);
-
-    if (charCode>=33 && charCode<=57)
-        return true
-    else if (charCode>=65 && charCode<=90)
-        return true
-    else if (charCode>=97 && charCode<=122)
-        return true
-    return false
-}
 
 const client = new Client({
     intents: [
@@ -65,12 +54,7 @@ client.on("message", async (msg) => {
                 msg.reply(`Please write a command name and a name after **${PREFIX}**`)
             } else {
                 const CMD_NAME = CMD.toUpperCase()
-                const args = [];
-    
-                for (let i=0; i<rawArgs.length; i++){
-                    if (checkArg(rawArgs[i]))
-                        args.push(rawArgs[i])
-                }
+                const args = makeBetterArgs(rawArgs)
                 
                 const goodName = args.join(" ")
                 const enteredName = args.join("+")
