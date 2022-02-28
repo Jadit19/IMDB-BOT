@@ -108,7 +108,7 @@ export const sendPersonInfo = async (msg, url, goodName) => {
             { name: "Birth", value: extractedData.born, inline: true },
             { name: "Works as", value: extractedData.works, inline: true },
             { name: "\u200B", value: "\u200B", inline: true },
-            { name: "Movies", value: extractedData.movies },
+            { name: "Popular Works", value: extractedData.movies },
             { name: "Awards", value: extractedData.awards }
         )
 
